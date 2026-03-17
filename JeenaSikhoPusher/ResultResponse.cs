@@ -13,5 +13,6 @@ namespace JeenaSikhoPusher
         public string message { get; set; }
         public int order_id { get; set; }
         public string apiEndPoint { get; set; }
+
     }
 }
