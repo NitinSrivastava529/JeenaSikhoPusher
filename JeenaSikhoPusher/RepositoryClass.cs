@@ -32,6 +32,7 @@ namespace JeenaSikhoPusher
         {
             timer.Enabled = true;
             timer.Start();
+
         }
         public void Dispose()
         {
