@@ -100,7 +100,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="bin\Debug\JeenaSikhoPusher.exe.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -116,24 +115,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\JeenaSikhoPusher.exe" />
-    <Content Include="bin\Debug\JeenaSikhoPusher.pdb" />
-    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
-    <Content Include="bin\Debug\Newtonsoft.Json.xml" />
-    <Content Include="bin\Debug\report_sync_1.ico" />
-    <Content Include="bin\Debug\report_sync_2.ico" />
-    <Content Include="bin\Debug\Telerik.WinControls.dll" />
-    <Content Include="bin\Debug\Telerik.WinControls.GridView.dll" />
-    <Content Include="bin\Debug\Telerik.WinControls.GridView.xml" />
-    <Content Include="bin\Debug\Telerik.WinControls.UI.dll" />
-    <Content Include="bin\Debug\Telerik.WinControls.UI.xml" />
-    <Content Include="bin\Debug\Telerik.WinControls.xml" />
-    <Content Include="bin\Debug\TelerikCommon.dll" />
     <Content Include="report_sync_1.ico" />
     <Content Include="report_sync_2.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Release\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

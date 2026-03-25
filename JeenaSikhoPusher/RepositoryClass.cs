@@ -148,7 +148,6 @@ namespace JeenaSikhoPusher
                             payment_method = new List<string>(),
                             amount = new List<int>()
                         };
-
                         foreach (DataRow row in dsData.Tables[2].Rows)
                         {
                             request.payment.payment_mode.Add(row["payment_mode"].ToString());
@@ -175,7 +174,7 @@ namespace JeenaSikhoPusher
             {
                 var request = new HttpRequestMessage(
                 HttpMethod.Post,
-                "https://stagging.hiims.in/diagnosticServices/sendPatientReportViaChandan"
+                "https://admin.hiims.in/diagnosticServices/sendPatientReportViaChandan"
                 );
 
                 // Authorization header
@@ -201,7 +200,7 @@ namespace JeenaSikhoPusher
             {
                 var request = new HttpRequestMessage(
                 HttpMethod.Post,
-                "https://stagging.hiims.in/diagnosticServices/cancelReportFromChandan"
+                "https://admin.hiims.in/diagnosticServices/cancelReportFromChandan"
                 );
 
                 // Authorization header
