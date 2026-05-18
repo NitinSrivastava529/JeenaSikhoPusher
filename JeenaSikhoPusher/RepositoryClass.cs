@@ -26,7 +26,7 @@ namespace JeenaSikhoPusher
             if (!bgWorker.IsBusy)
             {
                 bgWorker.RunWorkerAsync();
-            }            
+            }
         }
         public void StartSyncProcess()
         {
@@ -60,7 +60,7 @@ namespace JeenaSikhoPusher
         public async Task CancelPatientData()
         {
             ContextMenus.lastrun = System.DateTime.Now.ToString();
-            DataSet ds = JeenaSikhoPusherQueries("-", "-", "-", "GetCancelPatientForSync");
+            DataSet ds = JeenaSikhoPusherQueries("-", "-", "-", "-", "GetCancelPatientForSync");
             DataSet dsData = new DataSet();
             _result = "Success";
             CancelReportModel request = new CancelReportModel();
@@ -70,7 +70,7 @@ namespace JeenaSikhoPusher
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     visitNoForPush = dr["VisitNo"].ToString();
-                    dsData = JeenaSikhoPusherQueries("-", dr["VisitNo"].ToString(), "-", "CancelReportData");
+                    dsData = JeenaSikhoPusherQueries("-", dr["VisitNo"].ToString(), "-", "-", "CancelReportData");
                     try
                     {
                         if (dsData.Tables[0].Rows.Count > 0)
@@ -92,10 +92,7 @@ namespace JeenaSikhoPusher
                         string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgImV4cCI6IDMxLTEyLTIwMjMsICAiaWF0IjogMzEtMTItMjAyMywgICJpc3MiOiAiYWRkbWluLmhpaW1zLmluIiwgICJwYXRuYXIiOiAiY2hhbmRhbiBsYWIifQ==";
                         ResultResponse res = await CancelPatientReportAsync(request, token);
                         _result = res.message;
-                        if (res.message.Contains("successfully"))
-                        {
-                            JeenaSikhoPusherQueries("-", visitNoForPush, "-", "CancelUpdateSync");
-                        }
+                        JeenaSikhoPusherQueries("-", visitNoForPush, "-",res.message, "CancelUpdateSync");
                     }
                     catch (Exception ex) { }
                 }
@@ -105,7 +102,7 @@ namespace JeenaSikhoPusher
         public async Task PostPatientData()
         {
             ContextMenus.lastrun = System.DateTime.Now.ToString();
-            DataSet ds = JeenaSikhoPusherQueries("-", "-", "-", "GetPatientForSync");
+            DataSet ds = JeenaSikhoPusherQueries("-", "-", "-", "-", "GetPatientForSync");
             DataSet dsData = new DataSet();
             _result = "Success";
             string visitNoForPush = "-";
@@ -115,7 +112,7 @@ namespace JeenaSikhoPusher
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     visitNoForPush = dr["VisitNo"].ToString();
-                    dsData = JeenaSikhoPusherQueries("-", dr["VisitNo"].ToString(), "-", "PatientReport");
+                    dsData = JeenaSikhoPusherQueries("-", dr["VisitNo"].ToString(), "-", "-", "PatientReport");
                     try
                     {
 
@@ -154,13 +151,12 @@ namespace JeenaSikhoPusher
                             request.payment.payment_method.Add(row["payment_method"].ToString());
                             request.payment.amount.Add(Convert.ToInt32(row["amount"]));
                         }
+                        string order_id = "0";
                         string token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgImV4cCI6IDMxLTEyLTIwMjMsICAiaWF0IjogMzEtMTItMjAyMywgICJpc3MiOiAiYWRkbWluLmhpaW1zLmluIiwgICJwYXRuYXIiOiAiY2hhbmRhbiBsYWIifQ==";
                         ResultResponse res = await SendPatientReportAsync(request, token);
                         _result = res.message;
-                        if (res.message.Contains("successfully"))
-                        {
-                            JeenaSikhoPusherQueries("-", visitNoForPush, res.order_id.ToString(), "UpdateSync");
-                        }
+                        order_id = res.order_id.ToString();
+                        JeenaSikhoPusherQueries("-", visitNoForPush, order_id,res.message, "UpdateSync");
                     }
                     catch (Exception ex) { }
                 }
@@ -189,7 +185,7 @@ namespace JeenaSikhoPusher
 
                 var response = await client.SendAsync(request);
 
-                response.EnsureSuccessStatusCode();
+               // response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<ResultResponse>(result);
             }
@@ -215,12 +211,12 @@ namespace JeenaSikhoPusher
 
                 var response = await client.SendAsync(request);
 
-                response.EnsureSuccessStatusCode();
+                //response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<ResultResponse>(result);
             }
         }
-        public DataSet JeenaSikhoPusherQueries(string UHID, string IPOPNo, string Prm1, string Logic)
+        public DataSet JeenaSikhoPusherQueries(string UHID, string IPOPNo, string Prm1,string Prm2, string Logic)
         {
             string processInfo = string.Empty;
             DataSet ds = new DataSet();
@@ -233,6 +229,7 @@ namespace JeenaSikhoPusher
                     cmd.Parameters.Add("@UHID", SqlDbType.VarChar, 30).Value = UHID;
                     cmd.Parameters.Add("@IPOPNo", SqlDbType.VarChar, 30).Value = IPOPNo;
                     cmd.Parameters.Add("@Prm1", SqlDbType.VarChar, 100).Value = Prm1;
+                    cmd.Parameters.Add("@Prm2", SqlDbType.VarChar).Value = Prm2;
                     cmd.Parameters.Add("@Logic", SqlDbType.VarChar, 1000).Value = Logic;
                     try
                     {
